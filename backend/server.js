@@ -8,6 +8,7 @@ import { serve } from "inngest/express";
 
 
 const app = express()
+let startserver = async()=>{
 await connectdb()
 app.use(express.json())
 app.use(cors())
@@ -22,3 +23,5 @@ const port =process.env.PORT  || 4000;
 app.listen(port,()=>{
     console.log("server is rrunning on port on 4000")
 })
+}
+startserver()
