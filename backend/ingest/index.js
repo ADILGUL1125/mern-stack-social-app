@@ -39,7 +39,7 @@ const syncusercreation = inngest.createFunction(
 const syncuserupdate = inngest.createFunction(
     {id:'update-user-from-clerk'},
     {event:'clerk/user.updated'},
-    async (event) => {
+    async ({event}) => {
         const {id,first_name,last_name,email_addresses,image_url} =event.data
        const updateuserdata ={
         email:email_addresses[0].email_address,
@@ -54,13 +54,20 @@ const syncuserupdate = inngest.createFunction(
 const syncuserdelete = inngest.createFunction(
     {id:'delete-user-with-clerk'},
     {event:'clerk/user.deleted'},
-    async (event) => {
+    async ({event}) => {
           console.log("========== USER deleted EVENT ==========");
         const {id} =event.data
        
        await User.findByIdAndDelete(id)
     }
 )
+// const sendnewconnectionrequesreminder =inngest.createFunction(
+//   {id:"send-new-connection-request-reminder"},
+//   {event:"app/connection-request"},
+//   async({event})=>{
+
+//   }
+// )
 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [syncusercreation,

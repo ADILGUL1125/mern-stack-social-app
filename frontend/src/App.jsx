@@ -8,13 +8,22 @@ import Connection from "./pages/connection";
 import Discover from "./pages/discover";
 import Profile from "./pages/profile";
 import Createpost from "./pages/createpost";
-import {useUser} from "@clerk/clerk-react"
+import {useUser,useAuth} from "@clerk/clerk-react"
 import Layout from "./pages/layout";
 import {Toaster} from "react-hot-toast"
+import { ToyBrick } from "lucide-react";
+import { useEffect } from "react";
 const App = () => {
   // console.log("user",useUser)
   const {user}=useUser()
   console.log(user)
+  const  {getToken}=useAuth()
+  useEffect(()=>{
+    if(user){
+
+      getToken().then((token)=>console.log(token))
+    }
+  },[user])
   return (
     <>
     <Toaster/>
