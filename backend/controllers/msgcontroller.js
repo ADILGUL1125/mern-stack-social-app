@@ -1,6 +1,6 @@
 // create an empty object to store ss Event connecions
 
-import Message from "../modals/message";
+import Message from "../modals/message.js";
 
 
 const connections ={}
