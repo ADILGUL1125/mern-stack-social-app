@@ -1,6 +1,7 @@
 // import { connection } from "mongoose"
 import client from "../config/imagekit.js"
 import connection from "../modals/connections.js"
+import Post from "../modals/post.js"
 
 import User from "../modals/user.js"
 import fs from "fs"
@@ -293,6 +294,32 @@ export const acceptconnectionreq=async(req,res)=>{
         res.json({
             success:false,
             message:error.message
+        })
+    }
+}
+// get user profile
+export const getuserprofile =async(req,res)=>{
+    try {
+        const {profileid} =req.body;
+        const profile =await User.findById(profileid)
+        if(!profile){
+            return res.json({
+                success:false,
+                message:"profile not found"
+
+            })
+        }
+        const posts =await Post.find({user:profileid}).populate('user')
+        return res.json({
+            success:true,
+            profile,
+            posts
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.json({
+            message:error.message,
+            success:false
         })
     }
 }

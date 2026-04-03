@@ -1,5 +1,7 @@
 import { Inngest } from "inngest";
 import User from "../modals/user.js";
+import Story from "../modals/story.js";
+import Message from "../modals/message.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "pingup-app" });
@@ -61,17 +63,29 @@ const syncuserdelete = inngest.createFunction(
        await User.findByIdAndDelete(id)
     }
 )
-// const sendnewconnectionrequesreminder =inngest.createFunction(
-//   {id:"send-new-connection-request-reminder"},
-//   {event:"app/connection-request"},
-//   async({event})=>{
+// ingest function to delete dtory after 24 hours
 
-//   }
-// )
 
+const deletestory =inngest.createFunction(
+  {id:'story-delete'},
+
+  {event:'app/story.delete'},
+  async ({event,step}) => {
+    const {storyId} =event.data
+    const in24hours =new Date(Date.now() +24*60*60*1000)
+    await step.sleepUntil('wait-for-24-hours',in24hours)
+    await step.run("delete-story",async()=>{
+      await Story.findByIdAndDelete(storyId)
+      return {message:"story deleted"}
+    })
+    
+  }
+)
+// 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [syncusercreation,
     syncuserupdate,
-    syncuserdelete
+    syncuserdelete,
+    deletestory
 
 ];

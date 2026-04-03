@@ -4,8 +4,9 @@ import User from "../modals/user.js"
 // add post
 export const addpost =async(req,res)=>{
     try {
-        const {useerId}=req.auth()
-        const {content,posttype}=req.body
+        const {userId}=req.auth()
+        console.log("req body ",req.body)
+        const {content,posttype}=req.body || {}
         await Post.create({
             user:userId,
             content,
@@ -31,8 +32,8 @@ export const getfeedpost =async(req,res)=>{
         const {userId}=req.auth()
         const user =await User.findById(userId)
         // user connection an dfollowing
-        const userids =[userId ,...user.connections,...user.following]
-        const posts =await Post.find({user:{$in:userids}}).populate("User").sort({createdAt:-1})
+        const userids =[userId ,...user.connection,...user.following]
+        const posts =await Post.find({user:{$in:userids}}).populate("user").sort({createdAt:-1})
         res.json({
             success:true,
         posts

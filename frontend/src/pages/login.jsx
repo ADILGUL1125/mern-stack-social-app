@@ -1,8 +1,10 @@
 import React from "react";
 import { assets } from "../assets/assets/assets";
 import { Star } from "lucide-react";
-import {SignIn} from "@clerk/clerk-react"
+import {SignIn,useAuth} from "@clerk/clerk-react"
+import Loading from "../components/loading";
 const Login = () => {
+  // const {isLoaded}=useAuth()
   return (
     <div className=" flex flex-col md:flex-row min-h-screen">
       {/* background image */}
